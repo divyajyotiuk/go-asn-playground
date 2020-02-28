@@ -22,9 +22,10 @@ If there is an error, activate development environment **before** running the sc
 **OR**
 
 Run the following commands
-
-`cd flask-api`
-`flask run`
+```
+cd flask-api
+flask run
+```
 
 ### `npm start`
 
