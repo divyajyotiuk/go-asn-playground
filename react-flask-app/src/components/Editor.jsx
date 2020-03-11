@@ -6,6 +6,8 @@ import './styles/Containers.css'
 import { Card, CardBody,
     CardTitle, Button, CardFooter} from 'reactstrap';
 
+var value = "";
+
 class Editor extends Component {
     constructor(props) {
         super(props);
@@ -17,9 +19,17 @@ class Editor extends Component {
     onLoad(editor) {
         console.log("i've loaded", editor);
       }
-    onChange(newValue) {
-        console.log('change',newValue);
+    onChange = (newValue) => {
+      console.log("change ",newValue);
+      value = newValue;
       }
+
+    onCompileButtonClicked=()=>{
+      console.log("compile")
+      this.setState({
+        result: value
+      });
+    }
       
 
     render(){
@@ -33,12 +43,13 @@ class Editor extends Component {
           onChange={this.onChange}
           name="ace-editor"
           width="100%"
-          editorProps={{$blockScrolling: true}}   
+          editorProps={{$blockScrolling: true}}  
+          value={this.state.result} 
           />
         </CardBody>
         <CardFooter >
-            <Button className="reset-btn">Reset</Button>
-          <Button className="compile-btn">Compile</Button>
+          <Button className="reset-btn" >Reset</Button>
+          <Button className="compile-btn" onClick={this.onCompileButtonClicked}>Compile</Button>
           </CardFooter>
       </Card>           
      </div>
