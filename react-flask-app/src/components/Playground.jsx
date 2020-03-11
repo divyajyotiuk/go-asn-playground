@@ -64,7 +64,7 @@ class Playground extends Component {
               </div>
             </Col>
             <Col sm="4">
-              <ResultBox />
+              <ResultBox result={this.state.result} />
             </Col>
             <Col sm="4">
               <EncodeBox />

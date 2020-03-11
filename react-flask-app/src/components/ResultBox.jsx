@@ -8,7 +8,7 @@ const ResultBox = props => {
       <Card>
         <CardBody>
           <CardTitle>Result</CardTitle>
-          <CardText> Body </CardText>
+          <CardText> {props.result} </CardText>
         </CardBody>
         <CardFooter></CardFooter>
       </Card>
