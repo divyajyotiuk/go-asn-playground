@@ -1,19 +1,16 @@
-import React, { useState, useEffect,  Component } from 'react';
-import Header from './components/Header';
-import Playground from './components/Playground';
-import './components/styles/Containers.css'
+import React, { useState, useEffect, Component } from "react";
+import Header from "./components/Header";
+import Playground from "./components/Playground";
+import "./components/styles/Containers.css";
 
 class Main extends Component {
-
-  render ()
-  {
-    return(
+  render() {
+    return (
       <div>
-      <Header />
-      <Playground/>
-    </div>
-    )
-    
+        <Header />
+        <Playground />
+      </div>
+    );
   }
 }
 
@@ -28,4 +25,3 @@ class Main extends Component {
 // }
 
 export default Main;
-
