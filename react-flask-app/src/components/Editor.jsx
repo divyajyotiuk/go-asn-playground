@@ -2,12 +2,14 @@ import React, {Component} from 'react';
 import AceEditor from 'react-ace';
 import './styles/Editor.css';
 import './styles/Buttons.css';
+import './styles/Containers.css'
 import { Card, CardBody,
     CardTitle, Button, CardFooter} from 'reactstrap';
 
 class Editor extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.state = {result : ''};
     }
     componentDidMount(){
     }

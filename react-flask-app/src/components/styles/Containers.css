@@ -1,6 +1,13 @@
-/* .result-container {
-    height:300px;
-    width:33.33%;
-    margin-left: 50px;
+.result-container {
+    width:90%;   
+}
+
+.page-container {
     margin-top: 50px;
-} */
+    /* border: 0.1em solid; */
+    margin-left: 50px;
+}
+
+.editor-container {
+    width:90%;
+}

@@ -4,6 +4,7 @@ import Editor from './components/Editor';
 import EncodeBox from './components/EncodeBox';
 import ResultBox from './components/ResultBox';
 import { Container, Row, Col } from 'reactstrap';
+import './components/styles/Containers.css'
 
 class Main extends Component {
     
@@ -13,21 +14,21 @@ class Main extends Component {
     return(
       <div>
       <Header />
-
-      <Container>
+      <div className="page-container">
+      <Container fluid={true} width="100%">
         <Row>
-          <Col >
+          <Col sm="4">
           <Editor />
-          </Col>
-          <Col >
+          </Col >
+          <Col sm="4">
           <ResultBox />
           </Col>
-          <Col >
+          <Col sm="4">
           <EncodeBox />
           </Col>
         </Row>
       </Container>  
-
+      </div>
     </div>
     )
     
