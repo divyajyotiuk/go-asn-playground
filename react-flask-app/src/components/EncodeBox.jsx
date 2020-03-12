@@ -4,7 +4,7 @@ import "./styles/Containers.css";
 
 const EncodeBox = props => {
   return (
-    <div className="result-container">
+    <div className="encode-container">
       <Card>
         <CardBody>
           <CardTitle>Encoding</CardTitle>

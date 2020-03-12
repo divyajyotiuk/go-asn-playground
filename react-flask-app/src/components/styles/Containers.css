@@ -1,5 +1,6 @@
 .result-container {
   width: 95%;
+  margin-top: 50px;
 }
 
 .page-container {
@@ -9,5 +10,13 @@
 }
 
 .editor-container {
+  width: 95%;
+}
+
+.console-container {
+  width: 95%;
+}
+
+.encode-container {
   width: 95%;
 }

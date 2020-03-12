@@ -6,6 +6,7 @@ import "./styles/Containers.css";
 import { Card, CardBody, CardTitle, Button, CardFooter } from "reactstrap";
 import EncodeBox from "./EncodeBox";
 import ResultBox from "./ResultBox";
+import Console from "./Console";
 import { Container, Row, Col } from "reactstrap";
 
 var value = "";
@@ -32,6 +33,13 @@ class Playground extends Component {
     });
   };
 
+  onResetButtonClicked = () => {
+    console.log("reset");
+    this.setState({
+      result: ""
+    });
+  };
+
   render() {
     return (
       <div className="page-container">
@@ -52,7 +60,12 @@ class Playground extends Component {
                     />
                   </CardBody>
                   <CardFooter>
-                    <Button className="reset-btn">Reset</Button>
+                    <Button
+                      className="reset-btn"
+                      onClick={this.onResetButtonClicked}
+                    >
+                      Reset
+                    </Button>
                     <Button
                       className="compile-btn"
                       onClick={this.onCompileButtonClicked}
@@ -64,10 +77,15 @@ class Playground extends Component {
               </div>
             </Col>
             <Col sm="4">
-              <ResultBox result={this.state.result} />
+              <EncodeBox />
             </Col>
             <Col sm="4">
-              <EncodeBox />
+              <Row>
+                <Console result={this.state.result} />
+              </Row>
+              <Row>
+                <ResultBox result={this.state.result} />
+              </Row>
             </Col>
           </Row>
         </Container>
