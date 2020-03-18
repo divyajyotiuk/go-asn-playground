@@ -5,14 +5,10 @@ import "./styles/Containers.css";
 const Console = props => {
   return (
     <div className="console-container">
-      <Card
-        body
-        inverse
-        style={{ backgroundColor: "#333", borderColor: "#333" }}
-      >
+      <Card>
         <CardBody>
           <CardTitle>Console</CardTitle>
-          <CardText> {props.result} </CardText>
+          <div className="console-area">{props.result}</div>
         </CardBody>
         <CardFooter></CardFooter>
       </Card>

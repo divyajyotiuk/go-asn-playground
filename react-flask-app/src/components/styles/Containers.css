@@ -20,3 +20,13 @@
 .encode-container {
   width: 95%;
 }
+
+.console-area {
+  font-family: courier, monospace;
+  color: #fff;
+  height: 350px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 14px;
+  background-color: black;
+}

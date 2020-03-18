@@ -1,42 +1,34 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import AceEditor from "react-ace";
 import "./styles/Editor.css";
 import "./styles/Buttons.css";
 import "./styles/Containers.css";
 import { Card, CardBody, CardTitle, Button, CardFooter } from "reactstrap";
-import EncodeBox from "./EncodeBox";
 import ResultBox from "./ResultBox";
 import Console from "./Console";
 import { Container, Row, Col } from "reactstrap";
+import { TabContent, TabPane, Nav, NavItem, NavLink } from "reactstrap";
+import classnames from "classnames";
 
-var value = "";
+var editor_value = null;
 
 class Playground extends Component {
   constructor(props) {
     super(props);
-    this.state = { result: "" };
+    this.state = {
+      schema_output: ""
+    };
   }
-  componentDidMount() {}
-
-  onLoad(editor) {
-    console.log("i've loaded", editor);
-  }
-  onChange = newValue => {
-    console.log("change ", newValue);
-    value = newValue;
-  };
 
   onCompileButtonClicked = () => {
-    console.log("compile");
     this.setState({
-      result: value
+      schema_output: editor_value
     });
   };
 
   onResetButtonClicked = () => {
-    console.log("reset");
     this.setState({
-      result: ""
+      schema_output: ""
     });
   };
 
@@ -50,14 +42,7 @@ class Playground extends Component {
                 <Card>
                   <CardBody>
                     <CardTitle>Schema</CardTitle>
-                    <AceEditor
-                      onLoad={this.onLoad}
-                      onChange={this.onChange}
-                      name="ace-editor"
-                      width="100%"
-                      editorProps={{ $blockScrolling: true }}
-                      value={this.state.result}
-                    />
+                    <Editor editorValue={this.state.schema_output} />
                   </CardBody>
                   <CardFooter>
                     <Button
@@ -72,19 +57,30 @@ class Playground extends Component {
                     >
                       Compile
                     </Button>
+                    <p style={{ marginTop: 20 }}>ASN.1 Schema</p>
+                  </CardFooter>
+                </Card>
+              </div>
+            </Col>
+
+            <Col sm="4">
+              <div className="encode-container">
+                <Card>
+                  <CardBody>
+                    <EncodeBox />
+                  </CardBody>
+                  <CardFooter>
+                    <p>BER Encoding and Decoding schemes</p>
                   </CardFooter>
                 </Card>
               </div>
             </Col>
             <Col sm="4">
-              <EncodeBox />
-            </Col>
-            <Col sm="4">
               <Row>
-                <Console result={this.state.result} />
+                <Console result={this.state.schema_output} />
               </Row>
               <Row>
-                <ResultBox result={this.state.result} />
+                <ResultBox result={this.state.schema_result} />
               </Row>
             </Col>
           </Row>
@@ -93,5 +89,79 @@ class Playground extends Component {
     );
   }
 }
+
+class Editor extends Component {
+  onChange = newValue => {
+    editor_value = newValue;
+  };
+
+  render() {
+    return (
+      <AceEditor
+        onChange={this.onChange}
+        name="ace-editor"
+        width="100%"
+        editorProps={{ $blockScrolling: true }}
+        value={this.props.editorValue}
+      />
+    );
+  }
+}
+
+const EncodeBox = props => {
+  const [activeTab, setActiveTab] = useState("1");
+
+  const toggle = tab => {
+    if (activeTab !== tab) setActiveTab(tab);
+  };
+  return (
+    <div>
+      <Nav tabs>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === "1" })}
+            onClick={() => {
+              toggle("1");
+            }}
+          >
+            Encode
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === "2" })}
+            onClick={() => {
+              toggle("2");
+            }}
+          >
+            Decode
+          </NavLink>
+        </NavItem>
+      </Nav>
+      <TabContent activeTab={activeTab}>
+        <TabPane tabId="1">
+          <Card>
+            <CardBody>
+              <Editor />
+            </CardBody>
+            <CardFooter>
+              <Button className="compile-btn">Encode</Button>
+            </CardFooter>
+          </Card>
+        </TabPane>
+        <TabPane tabId="2">
+          <Card>
+            <CardBody>
+              <Editor />
+            </CardBody>
+            <CardFooter>
+              <Button className="compile-btn">Decode</Button>
+            </CardFooter>
+          </Card>
+        </TabPane>
+      </TabContent>
+    </div>
+  );
+};
 
 export default Playground;
