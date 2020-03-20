@@ -10,27 +10,44 @@ import { Container, Row, Col } from "reactstrap";
 import { TabContent, TabPane, Nav, NavItem, NavLink } from "reactstrap";
 import classnames from "classnames";
 
-var editor_value = null;
+var schema_editor = "",
+  encode_editor = "",
+  decode_editor = "";
 
-class Playground extends Component {
+class Editor extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      schema_output: ""
-    };
   }
 
-  onCompileButtonClicked = () => {
-    this.setState({
-      schema_output: editor_value
-    });
+  onChange = newValue => {
+    if (this.props.flag === 1) {
+      schema_editor = newValue;
+    }
+    if (this.props.flag === 2) {
+      encode_editor = newValue;
+    }
+    if (this.props.flag === 3) {
+      decode_editor = newValue;
+    }
   };
 
-  onResetButtonClicked = () => {
-    this.setState({
-      schema_output: ""
-    });
-  };
+  render() {
+    return (
+      <AceEditor
+        onChange={this.onChange}
+        name="ace-editor"
+        width="100%"
+        editorProps={{ $blockScrolling: true }}
+        value={this.props.editorValue}
+      />
+    );
+  }
+}
+
+class Playground extends Component {
+  onCompileButtonClicked = () => {};
+
+  onResetButtonClicked = () => {};
 
   render() {
     return (
@@ -42,7 +59,7 @@ class Playground extends Component {
                 <Card>
                   <CardBody>
                     <CardTitle>Schema</CardTitle>
-                    <Editor editorValue={this.state.schema_output} />
+                    <Editor flag={1} />
                   </CardBody>
                   <CardFooter>
                     <Button
@@ -69,41 +86,20 @@ class Playground extends Component {
                   <CardBody>
                     <EncodeBox />
                   </CardBody>
-                  <CardFooter>
-                    <p>BER Encoding and Decoding schemes</p>
-                  </CardFooter>
                 </Card>
               </div>
             </Col>
             <Col sm="4">
               <Row>
-                <Console result={this.state.schema_output} />
+                <Console />
               </Row>
               <Row>
-                <ResultBox result={this.state.schema_result} />
+                <ResultBox />
               </Row>
             </Col>
           </Row>
         </Container>
       </div>
-    );
-  }
-}
-
-class Editor extends Component {
-  onChange = newValue => {
-    editor_value = newValue;
-  };
-
-  render() {
-    return (
-      <AceEditor
-        onChange={this.onChange}
-        name="ace-editor"
-        width="100%"
-        editorProps={{ $blockScrolling: true }}
-        value={this.props.editorValue}
-      />
     );
   }
 }
@@ -114,6 +110,10 @@ const EncodeBox = props => {
   const toggle = tab => {
     if (activeTab !== tab) setActiveTab(tab);
   };
+  const onEncodeButtonClicked = () => {};
+
+  const onDecodeButtonClicked = () => {};
+
   return (
     <div>
       <Nav tabs>
@@ -142,20 +142,36 @@ const EncodeBox = props => {
         <TabPane tabId="1">
           <Card>
             <CardBody>
-              <Editor />
+              <Editor flag={2} />
             </CardBody>
             <CardFooter>
-              <Button className="compile-btn">Encode</Button>
+              Encoding scheme
+              <Button
+                className="compile-btn"
+                onClick={() => {
+                  onEncodeButtonClicked();
+                }}
+              >
+                Encode
+              </Button>
             </CardFooter>
           </Card>
         </TabPane>
         <TabPane tabId="2">
           <Card>
             <CardBody>
-              <Editor />
+              <Editor flag={3} />
             </CardBody>
             <CardFooter>
-              <Button className="compile-btn">Decode</Button>
+              Decoding scheme
+              <Button
+                className="compile-btn"
+                onClick={() => {
+                  onDecodeButtonClicked();
+                }}
+              >
+                Decode
+              </Button>
             </CardFooter>
           </Card>
         </TabPane>
