@@ -14,11 +14,11 @@ def get_structures():
     text=eval(request.json["asn_text"])
     file = open("test.asn1", "w")
     for i in text:
-        f.write(i)
-        f.write("\n")
+        file.write(i)
+        file.write("\n")
     file.close()
     os.system("python pycrate_asn1compile.py -i test.asn1")
-    file_new=f = open("output.py", "r")
+    file_new = open("output.py", "r")
     output=file_new.read()
     sending_list=output.split("\n")
     send_dict["output"]=sending_list
