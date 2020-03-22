@@ -48,7 +48,9 @@ class Playground extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      asn_schema: ""
+      asn_schema: "",
+      console_output: "",
+      result_status: "No action performed"
     };
   }
 
@@ -63,17 +65,41 @@ class Playground extends Component {
 
     fetch(url, {
       method: "POST",
-      mode: "no-cors",
+      mode: "cors",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json"
       }
     })
-      .then(response => console.log("Success:", JSON.stringify(response)))
+      .then(response => {
+        if (response.status === 200) {
+          this.setState({
+            result_status: "Compiled Successfully"
+          });
+        }
+        if (response.status === 0) {
+          this.setState({
+            result_status: "Compile Failed"
+          });
+        }
+
+        return response.json();
+      })
+      .then(res => {
+        this.setState({
+          console_output: res.output
+        });
+      })
       .catch(error => console.error("Error:", error));
   };
 
-  onResetButtonClicked = () => {};
+  onResetButtonClicked = () => {
+    this.setState({
+      asn_schema: "",
+      console_output: "",
+      result_status: "No action performed"
+    });
+  };
 
   render() {
     return (
@@ -117,10 +143,10 @@ class Playground extends Component {
             </Col>
             <Col sm="4">
               <Row>
-                <Console />
+                <Console result={this.state.console_output} />
               </Row>
               <Row>
-                <ResultBox />
+                <ResultBox result={this.state.result_status} />
               </Row>
             </Col>
           </Row>
