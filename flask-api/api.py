@@ -20,12 +20,11 @@ def get_structures():
         file.write(i)
         file.write("\n")
     file.close()
-    # os.system("python pycrate_asn1compile.py -i test.asn1")
-    # file_new = open("output.py", "r")
-    # output=file_new.read()
-    # sending_list=output.split("\n")
-    # send_dict["output"]=sending_list
-    # return jsonify(send_dict)
+    os.system("python pycrate_asn1compile.py -i test.asn1")
+    file_new = open("out.py", "r")
+    output=file_new.read()
+    send_dict["output"]=output
+    return jsonify(send_dict)
 
 @app.route('/decode',methods=['POST'])
 def decode_text():
