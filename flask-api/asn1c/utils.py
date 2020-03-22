@@ -17,13 +17,13 @@
 # *
 # * You should have received a copy of the GNU Lesser General Public
 # * License along with this library; if not, write to the Free Software
-# * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+# * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # * MA 02110-1301  USA
 # *
 # *--------------------------------------------------------
 # * File Name : pycrate_asn1c/utils.py
 # * Created : 2016-03-02
-# * Authors : Benoit Michau 
+# * Authors : Benoit Michau
 # *--------------------------------------------------------
 # */
 
@@ -33,7 +33,7 @@ from keyword import iskeyword
 
 # pycrate_core is used only for basic library-wide functions / variables:
 # log(), python_version, integer_types, str_types
-from pycrate_core.utils import *
+from core.utils import *
 from .err               import ASN1Err
 
 # ------------------------------------------------------------------------------#
@@ -170,7 +170,7 @@ TYPE_INSTOF     = 'INSTANCE OF'
 
 
 # string types
-TYPE_STRINGS    = (TYPE_STR_IA5, TYPE_STR_PRINT, TYPE_STR_NUM, TYPE_STR_VIS, 
+TYPE_STRINGS    = (TYPE_STR_IA5, TYPE_STR_PRINT, TYPE_STR_NUM, TYPE_STR_VIS,
                    TYPE_STR_BMP, TYPE_STR_UTF8, TYPE_STR_ISO646, TYPE_STR_TELE,
                    TYPE_STR_VID, TYPE_STR_GRAPH, TYPE_STR_T61, TYPE_STR_GENE,
                    TYPE_STR_UNIV, TYPE_OBJ_DESC)
@@ -189,7 +189,7 @@ TYPE_CONST_SIZE = (TYPE_BIT_STR, TYPE_OCT_STR,
                    TYPE_STR_UNIV, TYPE_OBJ_DESC,
                    TYPE_SEQ_OF, TYPE_SET_OF,
                    TYPE_CHAR_STR)
-                    
+
 
 # ASN.1 tag identifers
 TAG_IMPLICIT     = 'IMPLICIT'
@@ -470,7 +470,7 @@ def scan_for_comments(text=''):
 
 def clean_text(text=''):
     """
-    processes text to: 
+    processes text to:
         remove ASN.1 comments
         replace tab with space
         remove duplicated spaces
@@ -552,7 +552,7 @@ def search_top_lvl_off(text=''):
 
 def search_between(text='', ins='{', outs='}'):
     """
-    returns a list of 2-tuple for each top level part of the text in-between 
+    returns a list of 2-tuple for each top level part of the text in-between
     `ins' and `outs' expression
     """
     # TODO: look for character string, defined between double-quotes ",
@@ -649,9 +649,9 @@ def extract_doublebrack(text=''):
 
 def extract_charstr(text=''):
     """
-    extracts the part of text between double-quote ", escaping doubled 
+    extracts the part of text between double-quote ", escaping doubled
     double-quotes, and removing newline groups
-    returns the remaining text, and the extracted content or None 
+    returns the remaining text, and the extracted content or None
     """
     text = text.strip()
     if text[0:1] != '"':
@@ -660,7 +660,7 @@ def extract_charstr(text=''):
         return text, None
     #
     esc = 0
-    for cur in range(1, len(text)): 
+    for cur in range(1, len(text)):
         # 1) end of text
         if cur == len(text) - 1:
             if text[cur:1+cur] != '"':
@@ -668,7 +668,7 @@ def extract_charstr(text=''):
                 return text, None
             else:
                 return '', re.subn('\s{0,}\n\s{0,}', '', text[1:-1])[0]
-        
+
         # 2) finding a double-quote
         if text[cur:1+cur] == '"':
             if esc > 0:
@@ -719,7 +719,7 @@ def extract_set(text=''):
     each component being separated with "|",
     and root and extension being separated with commas and "..."
     taking care of character strings definition between double-quotes "
-    
+
     returns a dict with root and ext keys and corresponding strings
     """
     # 1) we go char by char with a state machine, looking for:
@@ -737,11 +737,11 @@ def extract_set(text=''):
     value  = []
     #
     # state that says if we are in a charstr, between " or not
-    # we do not evaluate escaped double-quotes especially, 
+    # we do not evaluate escaped double-quotes especially,
     # as it is like we are leaving and reentering the charstr state
     charstr = False
     #
-    # state that says if we are inside any inner set inside the given set, 
+    # state that says if we are inside any inner set inside the given set,
     # between { and } or not
     innerset = 0
     #
@@ -776,7 +776,7 @@ def extract_set(text=''):
     if valgrp:
         valset.append( valgrp )
     #
-    # 2) we evaluate the list of groups found and the potential extensibility 
+    # 2) we evaluate the list of groups found and the potential extensibility
     # marker in between, and build the resulting root / ext dict
     #
     if len(valset) == 0:

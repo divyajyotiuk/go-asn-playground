@@ -17,20 +17,20 @@
 # *
 # * You should have received a copy of the GNU Lesser General Public
 # * License along with this library; if not, write to the Free Software
-# * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+# * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # * MA 02110-1301  USA
 # *
 # *--------------------------------------------------------
 # * File Name : pycrate_asn1c/tokenizer.py
 # * Created : 2018-03-13
-# * Authors : Benoit Michau 
+# * Authors : Benoit Michau
 # *--------------------------------------------------------
 #*/
 
 import re
-from pycrate_asn1c.err     import *
-from pycrate_asn1c.utils   import *
-from pycrate_asn1c.dictobj import *
+from .err     import *
+from .utils   import *
+from .dictobj import *
 
 
 # white space and new line
@@ -285,9 +285,9 @@ class Tokenizer(object):
     """handles consciously ASN.1 tokens, forward and backward, while ignoring
     ASN.1 comments
     """
-    
+
     REPR_OFF = 10
-    
+
     GROUP = {
         TOK_PARO  : TOK_PARC,  # ( )
         TOK_DBRAO : TOK_DBRAC, # [[ ]]
@@ -295,36 +295,36 @@ class Tokenizer(object):
         TOK_CBRAO : TOK_CBRAC, # { }
         TOK_BEG   : TOK_END    # BEGIN END
         }
-    
+
     def __init__(self, tokens=[]):
         self.toks = tokens
         # cursor
         self.cur = -1
         # stack of previous cursor value
         self.curp = []
-    
+
     def __repr__(self):
         cur = self.get_cur()
         return repr(self.toks[cur-self.REPR_OFF:cur+self.REPR_OFF])
-    
+
     def get_cur(self):
         return self.cur
-    
+
     def set_cur(self, cur):
         if not -1 <= cur < len(self.toks):
             raise(ASN1TokenizerErr('invalid cursor'))
         else:
             self.cur = cur
-    
+
     def count(self):
         return len(self.toks) - self.cur
-    
+
     def get_tok(self):
         try:
             return self.toks[self.cur]
         except:
             raise(ASN1TokenizerErr('invalid cursor'))
-    
+
     def get_next(self, off=1):
         ind, cnt, curp = 0, 0, self.cur
         for tok in self.toks[1+self.cur:]:
@@ -340,7 +340,7 @@ class Tokenizer(object):
         self.cur += cnt
         self.curp.append(curp)
         return tok
-    
+
     def has_next(self):
         for tok in self.toks[1+self.cur:]:
             if tok[0] == TOK_CMT:
@@ -348,7 +348,7 @@ class Tokenizer(object):
             else:
                 return True
         return False
-    
+
     def get_prev(self, off=1):
         ind, cnt, curp = 0, 0, self.cur
         for tok in self.toks[:self.cur][::-1]:
@@ -364,7 +364,7 @@ class Tokenizer(object):
         self.cur -= cnt
         self.curp.append(curp)
         return tok
-    
+
     def get_upto(self, target):
         curp = self.cur
         while self.get_next() != target:
@@ -373,7 +373,7 @@ class Tokenizer(object):
         self.curp.append(curp)
         self.cur += 1
         return self.__class__(self.toks[max(0, curp):self.cur-1])
-    
+
     def get_group(self, wbnd=True):
         tok, curp = self.toks[self.cur], self.cur
         if tok in self.GROUP:
@@ -396,7 +396,7 @@ class Tokenizer(object):
             return self.__class__(self.toks[curp:1+self.cur])
         else:
             return self.__class__(self.toks[1+curp:self.cur])
-    
+
     def get_comps(self, sep=TOK_COM):
         comps, curp, curlast = [], self.cur, self.cur
         while True:
@@ -416,10 +416,10 @@ class Tokenizer(object):
                 pass
         self.curp.append(curp)
         return comps
-    
+
     def undo(self):
         if not self.curp:
-            raise() 
+            raise()
         self.cur = self.curp[-1]
         del self.curp[-1]
 
@@ -469,7 +469,7 @@ def tokenize_text(text=u'', **kwargs):
         if oid:
             module['_oidtok_'] = oid
             # TODO: parse the OID value
-            
+
             module['_oid_'] = []
         else:
             module['_oidtok_'] = []
@@ -645,7 +645,7 @@ def scan_module_imp(Tok):
                 # module OID
                 imp[-1]['oidtok'] = Tok.get_group()
                 # TODO: parse the OID value
-                
+
                 rev = False
             elif tok[0] == TOK_LID:
                 asnlog('imported module OID reference is ambiguous, %s' % tok[1])
@@ -657,7 +657,7 @@ def scan_module_imp(Tok):
         tok = Tok.get_next()
     if sym:
         if len(sym) == 1 and sym[0][0].islower():
-            asnlog('imported module ambiguous OID references were actually OID references') 
+            asnlog('imported module ambiguous OID references were actually OID references')
             # this means all those ambiguous OID ref were actually OID ref for
             # the previous module instead of imported symbols
             for i in range(len(imp)-1):
@@ -665,7 +665,7 @@ def scan_module_imp(Tok):
                     # transfer the symbol as the OID ref of the previous module
                     imp[i]['oidtok'] = imp[i+1]['sym'][0][1]
                     del imp[i+1]['sym'][0]
-            imp[-1]['oidtok'] = sym[0]       
+            imp[-1]['oidtok'] = sym[0]
         else:
             raise(ASN1ProcTextErr('invalid module import'))
     return imp
@@ -937,13 +937,13 @@ def scan_const(Tok):
 
 
 def test():
-    
+
     import os
     from pycrate_asn1c.specdir import ASN_SPECS
-    
+
     p = '/home/user/pycrate/pycrate_asn1dir/'
     M = ASN1Dict()
-    
+
     for S in ASN_SPECS.values():
         if isinstance(S, (list, tuple)):
             S = S[0]

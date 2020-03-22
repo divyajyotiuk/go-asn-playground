@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, Request, request
-import os
+from pycrate_asn1compile import execute
 app = Flask(__name__)
 
 @app.route('/encode',methods=['POST'])
@@ -20,7 +20,7 @@ def get_structures():
         file.write(i)
         file.write("\n")
     file.close()
-    os.system("python pycrate_asn1compile.py -i test.asn1")
+    execute()
     file_new = open("out.py", "r")
     output=file_new.read()
     send_dict["output"]=output

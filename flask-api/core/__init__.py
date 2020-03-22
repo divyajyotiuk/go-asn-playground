@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 #/**
-# * Software Name : pycrate
+# * Software Name : pycrate 
 # * Version : 0.4
 # *
 # * Copyright 2016. Benoit Michau. ANSSI.
@@ -21,45 +21,11 @@
 # * MA 02110-1301  USA
 # *
 # *--------------------------------------------------------
-# * File Name : pycrate_asn1c/err.py
-# * Created : 2016-03-02
+# * File Name : pycrate_core/__init__.py
+# * Created : 2016-02-11
 # * Authors : Benoit Michau 
 # *--------------------------------------------------------
 #*/
-
-#------------------------------------------------------------------------------#
-# ASN.1 errors
-#------------------------------------------------------------------------------#
-
-try:
-    from pycrate_core.utils import PycrateErr
-except:
-    print('pycrate_core not found, ASN1Err will not inherit from PycrateErr')
-    # generic ASN.1 error
-    class ASN1Err(Exception):
-        pass
-else:
-    # generic ASN.1 error
-    class ASN1Err(PycrateErr):
-        pass
-
-# error when manipulating ASN.1 token
-class ASN1TokenizerErr(ASN1Err):
-    pass
-
-# error when processing ASN.1 text
-class ASN1ProcTextErr(ASN1Err):
-    pass
-
-# error when encountering an undefined object
-class ASN1ProcLinkErr(ASN1Err):
-    pass
-
-# error when manipulating an existing ASN1 object
-class ASN1ObjErr(ASN1Err):
-    pass
-
-# error when encountering an unsupported case
-class ASN1NotSuppErr(ASN1Err):
-    pass
-
+#
+__all__ = ['utils', 'charpy', 'repr', 'elt', 'base']
+__version__ = '0.4.0'
