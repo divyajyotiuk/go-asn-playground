@@ -95,7 +95,6 @@ class Playground extends Component {
 
   onResetButtonClicked = () => {
     this.setState({
-      asn_schema: "",
       console_output: "",
       result_status: "No action performed"
     });
