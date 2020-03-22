@@ -52,8 +52,8 @@ class Playground extends Component {
     };
   }
 
-  onCompileButtonClicked = () => {
-    this.setState({
+  onCompileButtonClicked = async () => {
+    await this.setState({
       asn_schema: schema_editor
     });
 
