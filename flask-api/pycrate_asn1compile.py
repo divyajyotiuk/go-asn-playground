@@ -32,7 +32,7 @@ import os
 import sys
 import argparse
 
-from asn1c.asnproc import compile_text, compile_spec, compile_all, \
+from pycrate_core.asnproc import compile_text, compile_spec, compile_all, \
      generate_modules, PycrateGenerator, JSONDepGraphGenerator, ASN_SPECS
 
 
