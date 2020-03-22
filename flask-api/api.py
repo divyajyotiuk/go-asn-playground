@@ -12,18 +12,20 @@ def get_structures():
     send_dict={}
     print("This is the fuction which produces python structures")
     print("asn text ------->", request.data)
-    text=eval(request.json["asn_text"])
+    text=eval(request.data.decode())
+    text=text["asn_text"]
+    text=text.split("\n")
     file = open("test.asn1", "w")
     for i in text:
         file.write(i)
         file.write("\n")
     file.close()
-    os.system("python pycrate_asn1compile.py -i test.asn1")
-    file_new = open("output.py", "r")
-    output=file_new.read()
-    sending_list=output.split("\n")
-    send_dict["output"]=sending_list
-    return jsonify(send_dict)
+    # os.system("python pycrate_asn1compile.py -i test.asn1")
+    # file_new = open("output.py", "r")
+    # output=file_new.read()
+    # sending_list=output.split("\n")
+    # send_dict["output"]=sending_list
+    # return jsonify(send_dict)
 
 @app.route('/decode',methods=['POST'])
 def decode_text():
