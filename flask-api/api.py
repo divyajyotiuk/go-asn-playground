@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify, Request, request
 import os
 app = Flask(__name__)
 
@@ -11,6 +11,7 @@ def encode_text():
 def get_structures():
     send_dict={}
     print("This is the fuction which produces python structures")
+    print("asn text ------->", request.data)
     text=eval(request.json["asn_text"])
     file = open("test.asn1", "w")
     for i in text:

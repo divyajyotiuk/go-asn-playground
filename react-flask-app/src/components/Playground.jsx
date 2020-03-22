@@ -45,7 +45,33 @@ class Editor extends Component {
 }
 
 class Playground extends Component {
-  onCompileButtonClicked = () => {};
+  constructor(props) {
+    super(props);
+    this.state = {
+      asn_schema: ""
+    };
+  }
+
+  onCompileButtonClicked = () => {
+    this.setState({
+      asn_schema: schema_editor
+    });
+
+    let url = "http://localhost:5000/structures";
+    let data = {};
+    data["asn_text"] = this.state.asn_schema;
+
+    fetch(url, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => console.log("Success:", JSON.stringify(response)))
+      .catch(error => console.error("Error:", error));
+  };
 
   onResetButtonClicked = () => {};
 
@@ -59,7 +85,7 @@ class Playground extends Component {
                 <Card>
                   <CardBody>
                     <CardTitle>Schema</CardTitle>
-                    <Editor flag={1} />
+                    <Editor editorValue={this.state.asn_schema} flag={1} />
                   </CardBody>
                   <CardFooter>
                     <Button
