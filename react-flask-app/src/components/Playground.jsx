@@ -161,7 +161,25 @@ const EncodeBox = props => {
   const toggle = tab => {
     if (activeTab !== tab) setActiveTab(tab);
   };
-  const onEncodeButtonClicked = () => {};
+
+  const onEncodeButtonClicked = () => {
+    let url = "http://localhost:5000/encode";
+    fetch(url, {
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify(encode_editor),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => response.json())
+      .then(res => {
+        console.log(res);
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+  };
 
   const onDecodeButtonClicked = () => {};
 

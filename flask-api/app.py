@@ -26,30 +26,31 @@ def encode_text():
 
     returns: dictionary with the ber encoding
     '''
-    output_dict={}
-    values=request.data.decode()
-    variable=""
+    output_dict = {}
+    values = request.data.decode()
+    print("encode --->", values)
+    variable = ""
     if "=" in values:
-        variable=values.split("=")[0].split()[0]
-        values= eval(values.split("=")[1])
+        variable = values.split("=")[0].split()[0]
+        values = eval(values.split("=")[1])
     else:
-        values= eval(values)
+        values = eval(values)
     import out
-    output_file=open("out.py", "r")
+    output_file = open("out.py", "r")
     class_find = output_file.read()
-    class_find=class_find.split("\n")
-    final_name=""
+    class_find = class_find.split("\n")
+    final_name = ""
     for i in class_find:
-        class_name=i.split()
+        class_name = i.split()
         if "class" in class_name:
-            final_name=class_name[1].split(":")[0]
+            final_name = class_name[1].split(":")[0]
             break
-    encoding=getattr(out, final_name)
+    encoding = getattr(out, final_name)
     if variable is not "":
-        encoding=getattr(encoding,variable)
+        encoding = getattr(encoding, variable)
     encoding.set_val(values)
-    ber_encoding=str(encoding.to_ber())
-    output_dict["ber_encoding"]=ber_encoding
+    ber_encoding = str(encoding.to_ber())
+    output_dict["output"] = ber_encoding
     jsonify(output_dict)
 
 
