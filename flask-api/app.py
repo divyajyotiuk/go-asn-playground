@@ -27,11 +27,16 @@ def encode_text():
     returns: dictionary with the ber encoding
     '''
     output_dict = {}
-    values = request.data.decode()
+    values = eval(request.data.decode())
+    values=values["encode_text"]
+    values="".join(values.split())
     print("encode --->", values)
     variable = ""
     if "=" in values:
         variable = values.split("=")[0].split()[0]
+        print(variable)
+        print(type(variable))
+        print(values.split("=")[1])
         values = eval(values.split("=")[1])
     else:
         values = eval(values)
