@@ -34,9 +34,6 @@ def encode_text():
     variable = ""
     if "=" in values:
         variable = values.split("=")[0].split()[0]
-        print(variable)
-        print(type(variable))
-        print(values.split("=")[1])
         values = eval(values.split("=")[1])
     else:
         values = eval(values)
@@ -56,7 +53,7 @@ def encode_text():
     encoding.set_val(values)
     ber_encoding = str(encoding.to_ber())
     output_dict["output"] = ber_encoding
-    jsonify(output_dict)
+    return jsonify(output_dict)
 
 
 @app.route('/structures', methods=['POST'])
