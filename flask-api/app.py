@@ -1,20 +1,43 @@
 from flask import Flask, jsonify, Request, request
 from pycrate_asn1compile import execute
 from flask_cors import CORS
+import os
 app = Flask(__name__)
 CORS(app)
 
 
 @app.route('/encode', methods=['POST'])
 def encode_text():
-    print("This is encoding the python structures function")
+    output_dict={}
+    values=request.data.decode()
+    variable=""
+    if "=" in values:
+        variable=values.split("=")[0].split()[0]
+        values= eval(values.split("=")[0].split()[1])
+    else:
+        values= eval(values)
+    import out
+    output_file=open("out.py", "r")
+    class_find = output_file.read()
+    class_find=class_find.split("\n")
+    final_name=""
+    for i in class_find:
+        class_name=i.split()
+        if "class" in class_name:
+            final_name=class_name[1].split(":")[0]
+            break
+    encoding=getattr(out, final_name)
+    if variable is not "":
+        encoding=getattr(encoding,variable)
+    encoding.set_val(values)
+    ber_encoding=str(encoding.to_ber())
+    output_dict["ber_encoding"]=ber_encoding
+    jsonify(output_dict)
 
 
 @app.route('/structures', methods=['POST'])
 def get_structures():
     send_dict = {}
-    print("This is the fuction which produces python structures")
-    print("asn text ------->", request.data)
     text = eval(request.data.decode())
     text = text["asn_text"]
     text = text.split("\n")
@@ -27,7 +50,7 @@ def get_structures():
     file_new = open("out.py", "r")
     output = file_new.read()
     send_dict["output"] = output
-    print("output.py -> ", send_dict)
+    os.remove("test.asn1")
     return jsonify(send_dict)
 
 
