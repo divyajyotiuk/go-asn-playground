@@ -31,7 +31,7 @@ def encode_text():
     variable=""
     if "=" in values:
         variable=values.split("=")[0].split()[0]
-        values= eval(values.split("=")[0].split()[1])
+        values= eval(values.split("=")[1])
     else:
         values= eval(values)
     import out
