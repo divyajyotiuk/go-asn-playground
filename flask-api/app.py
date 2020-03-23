@@ -8,6 +8,24 @@ CORS(app)
 
 @app.route('/encode', methods=['POST'])
 def encode_text():
+    '''
+    This function encodes the values into the python structures.
+    Rules:
+    For encoding the values into the python data structures
+    and getting the ber encoding, the following rules need
+    to be followed while inputting the values into the textbox
+    in the play ground-
+    1. If no specific variable you want to encode from the class
+       simply write a dictionary with all the key value pairs of
+       the asn class value variables.
+    2. If a specific variable from the class you want to set value
+       and encode it then write that varible in the same case as
+       written in class then put a "=" and write the dictionary with
+       key value pairs stating the key as the sub variable and value
+       as the value of the sub variable
+
+    returns: dictionary with the ber encoding
+    '''
     output_dict={}
     values=request.data.decode()
     variable=""
@@ -37,6 +55,11 @@ def encode_text():
 
 @app.route('/structures', methods=['POST'])
 def get_structures():
+    '''
+    This function is for getting the python get_structures.
+
+    returns:a dictionary with the python structure.
+    '''
     send_dict = {}
     text = eval(request.data.decode())
     text = text["asn_text"]
