@@ -82,7 +82,34 @@ def get_structures():
 
 @app.route('/decode', methods=['POST'])
 def decode_text():
-    print("This is the function which decodes the python structures.")
+    output_dict = {}
+    values = eval(request.data.decode())
+    values=values["decode_text"]
+    print("decode --->", values)
+    variable = ""
+    if "=" in values:
+        variable = values.split("=")[0].split()[0]
+        values = values.split("=")[1]
+    else:
+        values = values
+    import out
+    output_file = open("out.py", "r")
+    class_find = output_file.read()
+    class_find = class_find.split("\n")
+    final_name = ""
+    for i in class_find:
+        class_name = i.split()
+        if "class" in class_name:
+            final_name = class_name[1].split(":")[0]
+            break
+    encoding = getattr(out, final_name)
+    if variable is not "":
+        encoding = getattr(encoding, variable)
+    encoding.from_ber(values[2:-1].encode("utf-8"))
+    ber_decoded=str(encoding())
+    output_dict["output"] = ber_decoded
+    return jsonify(output_dict)
+
 
 
 app.run(host='0.0.0.0', port=8658, debug=True)
