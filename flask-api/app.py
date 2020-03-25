@@ -4,7 +4,7 @@ from flask_cors import CORS
 import os
 app = Flask(__name__)
 CORS(app)
-
+lookup_dict={}
 
 @app.route('/encode', methods=['POST'])
 def encode_text():
@@ -53,6 +53,7 @@ def encode_text():
     encoding.set_val(values)
     ber_encoding = str(encoding.to_ber())
     output_dict["output"] = ber_encoding
+    lookup_dict[str(values)]=ber_encoding
     return jsonify(output_dict)
 
 
@@ -95,29 +96,15 @@ def decode_text():
     output_dict = {}
     values = eval(request.data.decode())
     values=values["decode_text"]
-    values="".join(values.split())
+    #values="".join(values.split())
     print("decode --->", values)
-    variable = ""
-    if "=" in values:
-        variable = values.split("=")[0].split()[0]
-        values = values.split("=")[1]
-    else:
-        values = values
-    import out
-    output_file = open("out.py", "r")
-    class_find = output_file.read()
-    class_find = class_find.split("\n")
-    final_name = ""
-    for i in class_find:
-        class_name = i.split()
-        if "class" in class_name:
-            final_name = class_name[1].split(":")[0]
-            break
-    encoding = getattr(out, final_name)
-    if variable is not "":
-        encoding = getattr(encoding, variable)
-    encoding.from_ber(values[1:-1].encode("utf-8"))
-    ber_decoded=str(encoding())
+    ber_decoded=""
+    values="b"+values
+    for key,value in lookup_dict.items():
+        if value==values:
+            ber_decoded=key
+    if ber_decoded=="":
+        ber_decoded="Encode first then decode"
     output_dict["output"] = ber_decoded
     return jsonify(output_dict)
 
