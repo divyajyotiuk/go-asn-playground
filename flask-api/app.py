@@ -82,9 +82,20 @@ def get_structures():
 
 @app.route('/decode', methods=['POST'])
 def decode_text():
+    '''
+    This function returns the decoded form of the ber encoding.
+    The format in which the data needs to be sent is as follows-
+    1. If no specific variable you want to decode from the class
+       simply write the ber encoded form.
+    2. If a specific variable from the class you want to set value
+       and decode it then write that varible in the same case as
+       written in class then put a "=" and write the ber encoded form
+       which you have
+    '''
     output_dict = {}
     values = eval(request.data.decode())
     values=values["decode_text"]
+    values="".join(values.split())
     print("decode --->", values)
     variable = ""
     if "=" in values:
@@ -105,7 +116,7 @@ def decode_text():
     encoding = getattr(out, final_name)
     if variable is not "":
         encoding = getattr(encoding, variable)
-    encoding.from_ber(values[2:-1].encode("utf-8"))
+    encoding.from_ber(values[1:-1].encode("utf-8"))
     ber_decoded=str(encoding())
     output_dict["output"] = ber_decoded
     return jsonify(output_dict)
