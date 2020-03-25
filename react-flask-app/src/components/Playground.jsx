@@ -49,10 +49,19 @@ class Playground extends Component {
     super(props);
     this.state = {
       asn_schema: "",
-      console_output: "",
-      result_status: "No action performed"
+      activeTab: "1",
+      result_status: "No action performed",
+      console_output: ""
     };
   }
+
+  setActiveTab = tab => {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab
+      });
+    }
+  };
 
   onCompileButtonClicked = async () => {
     await this.setState({
@@ -78,11 +87,9 @@ class Playground extends Component {
           });
         }
         if (response.status === 0) {
-          this.setState({
-            result_status: "Compile Failed"
-          });
-        }
 
+          throw "Compile Failed";
+        }
         return response.json();
       })
       .then(res => {
@@ -90,7 +97,12 @@ class Playground extends Component {
           console_output: res.output
         });
       })
-      .catch(error => console.error("Error:", error));
+      .catch(error => {
+        this.setState({
+          result_status: error
+        });
+        console.error("Error:", error);
+      });
   };
 
   onResetButtonClicked = () => {
@@ -98,6 +110,81 @@ class Playground extends Component {
       console_output: "",
       result_status: "No action performed"
     });
+  };
+
+  onEncodeButtonClicked = () => {
+    let data = {};
+    data["encode_text"] = encode_editor;
+    let url = "http://localhost:5000/encode";
+    fetch(url, {
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        if (response.status === 200) {
+          this.setState({
+            result_status: "Encoded Successfully"
+          });
+        }
+        if (response.status === 0) {
+          throw "Encode Failed";
+        }
+        return response.json();
+      })
+      .then(res => {
+        let output = res.output;
+        output = output.replace("b", "");
+        this.setState({
+          console_output: output
+        });
+      })
+      .catch(error => {
+        this.setState({
+          result_status: error
+        });
+        console.error("Error:", error);
+      });
+  };
+
+  onDecodeButtonClicked = () => {
+    let data = {};
+    data["decode_text"] = decode_editor;
+    let url = "http://localhost:5000/decode";
+    fetch(url, {
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        if (response.status === 200) {
+          this.setState({
+            result_status: "Decoded Successfully"
+          });
+        }
+        if (response.status === 0) {
+          throw "Decode Failed";
+        }
+        return response.json();
+      })
+      .then(res => {
+        let output = res.output;
+        this.setState({
+          console_output: output
+        });
+      })
+      .catch(error => {
+        this.setState({
+          result_status: error
+        });
+        console.error("Error:", error);
+      });
   };
 
   render() {
@@ -135,7 +222,70 @@ class Playground extends Component {
               <div className="encode-container">
                 <Card>
                   <CardBody>
-                    <EncodeBox />
+                    <div>
+                      <Nav tabs>
+                        <NavItem>
+                          <NavLink
+                            active={this.state.activeTab === "1"}
+                            // className={classnames({
+                            //   active: activeTab === "1"
+                            // })}
+                            onClick={() => {
+                              this.setActiveTab("1");
+                            }}
+                          >
+                            Encode
+                          </NavLink>
+                        </NavItem>
+                        <NavItem>
+                          <NavLink
+                            active={this.state.activeTab === "2"}
+                            // className={classnames({
+                            //   active: activeTab === "2"
+                            // })}
+                            onClick={() => {
+                              this.setActiveTab("2");
+                            }}
+                          >
+                            Decode
+                          </NavLink>
+                        </NavItem>
+                      </Nav>
+                      <TabContent activeTab={this.state.activeTab}>
+                        <TabPane tabId="1">
+                          <Card>
+                            <CardBody>
+                              <Editor flag={2} />
+                            </CardBody>
+                            <CardFooter>
+                              Encoding scheme
+                              <Button
+                                className="compile-btn"
+                                onClick={this.onEncodeButtonClicked}
+                              >
+                                Encode
+                              </Button>
+                            </CardFooter>
+                          </Card>
+                        </TabPane>
+                        <TabPane tabId="2">
+                          <Card>
+                            <CardBody>
+                              <Editor flag={3} />
+                            </CardBody>
+                            <CardFooter>
+                              Decoding scheme
+                              <Button
+                                className="compile-btn"
+                                onClick={this.onDecodeButtonClicked}
+                              >
+                                Decode
+                              </Button>
+                            </CardFooter>
+                          </Card>
+                        </TabPane>
+                      </TabContent>
+                    </div>
                   </CardBody>
                 </Card>
               </div>
@@ -154,99 +304,5 @@ class Playground extends Component {
     );
   }
 }
-
-const EncodeBox = props => {
-  const [activeTab, setActiveTab] = useState("1");
-
-  const toggle = tab => {
-    if (activeTab !== tab) setActiveTab(tab);
-  };
-
-  const onEncodeButtonClicked = () => {
-    let url = "http://localhost:5000/encode";
-    fetch(url, {
-      method: "POST",
-      mode: "cors",
-      body: JSON.stringify(encode_editor),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => response.json())
-      .then(res => {
-        console.log(res);
-      })
-      .catch(error => {
-        console.error("Error:", error);
-      });
-  };
-
-  const onDecodeButtonClicked = () => {};
-
-  return (
-    <div>
-      <Nav tabs>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeTab === "1" })}
-            onClick={() => {
-              toggle("1");
-            }}
-          >
-            Encode
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeTab === "2" })}
-            onClick={() => {
-              toggle("2");
-            }}
-          >
-            Decode
-          </NavLink>
-        </NavItem>
-      </Nav>
-      <TabContent activeTab={activeTab}>
-        <TabPane tabId="1">
-          <Card>
-            <CardBody>
-              <Editor flag={2} />
-            </CardBody>
-            <CardFooter>
-              Encoding scheme
-              <Button
-                className="compile-btn"
-                onClick={() => {
-                  onEncodeButtonClicked();
-                }}
-              >
-                Encode
-              </Button>
-            </CardFooter>
-          </Card>
-        </TabPane>
-        <TabPane tabId="2">
-          <Card>
-            <CardBody>
-              <Editor flag={3} />
-            </CardBody>
-            <CardFooter>
-              Decoding scheme
-              <Button
-                className="compile-btn"
-                onClick={() => {
-                  onDecodeButtonClicked();
-                }}
-              >
-                Decode
-              </Button>
-            </CardFooter>
-          </Card>
-        </TabPane>
-      </TabContent>
-    </div>
-  );
-};
 
 export default Playground;

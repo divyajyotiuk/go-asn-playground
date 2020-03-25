@@ -28,8 +28,8 @@ def encode_text():
     '''
     output_dict = {}
     values = eval(request.data.decode())
-    values=values["encode_text"]
-    values="".join(values.split())
+    values = values["encode_text"]
+    values = "".join(values.split())
     print("encode --->", values)
     variable = ""
     if "=" in values:
