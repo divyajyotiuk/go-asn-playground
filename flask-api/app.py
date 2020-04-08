@@ -74,10 +74,21 @@ def get_structures():
         file.write("\n")
     file.close()
     execute()
-    file_new = open("out.py", "r")
+    # file_new = open("out.py", "r")
+    # output = file_new.read()
+    file = open("out_convert.py", "w")
+    with open("out.py") as fp:
+        for cnt, line in enumerate(fp):
+            if "import" not in line:
+                file.write(i)
+                file.write("\n")
+    os.system("python2 Gython/pythonjs/translator.py --go out_convert.py")
+    file_new = open("out_convert.go", "r")
     output = file_new.read()
     send_dict["output"] = output
     os.remove("test.asn1")
+    os.remove("out_convert.py")
+    os.remove("out_convert.go")
     return jsonify(send_dict)
 
 
