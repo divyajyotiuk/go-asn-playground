@@ -82,7 +82,7 @@ def get_structures():
             if "import" not in line:
                 file.write(i)
                 file.write("\n")
-    os.system("python2 Gython/pythonjs/translator.py --go out_convert.py")
+    os.system("python2 python_go/pythonjs/translator.py --go out_convert.py")
     file_new = open("out_convert.go", "r")
     output = file_new.read()
     send_dict["output"] = output
