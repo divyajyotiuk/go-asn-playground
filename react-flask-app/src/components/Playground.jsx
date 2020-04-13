@@ -87,7 +87,7 @@ class Playground extends Component {
           });
         }
         if (response.status === 0) {
-
+          
           throw "Compile Failed";
         }
         return response.json();
@@ -226,6 +226,7 @@ class Playground extends Component {
                       <Nav tabs>
                         <NavItem>
                           <NavLink
+                            style={{cursor: "pointer"}}
                             active={this.state.activeTab === "1"}
                             // className={classnames({
                             //   active: activeTab === "1"
@@ -239,6 +240,7 @@ class Playground extends Component {
                         </NavItem>
                         <NavItem>
                           <NavLink
+                            style={{cursor: "pointer"}}
                             active={this.state.activeTab === "2"}
                             // className={classnames({
                             //   active: activeTab === "2"
@@ -255,7 +257,7 @@ class Playground extends Component {
                         <TabPane tabId="1">
                           <Card>
                             <CardBody>
-                              <Editor flag={2} />
+                              <Editor editorValue={encode_editor} flag={2} />
                             </CardBody>
                             <CardFooter>
                               Encoding scheme
@@ -271,7 +273,7 @@ class Playground extends Component {
                         <TabPane tabId="2">
                           <Card>
                             <CardBody>
-                              <Editor flag={3} />
+                              <Editor editorValue={decode_editor} flag={3} />
                             </CardBody>
                             <CardFooter>
                               Decoding scheme
