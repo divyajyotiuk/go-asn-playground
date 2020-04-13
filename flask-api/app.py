@@ -76,21 +76,21 @@ def get_structures():
     execute()
     # file_new = open("out.py", "r")
     # output = file_new.read()
-    file = open("out_convert.py", "w")
+    file1 = open("out_convert.py", "w")
     with open("out.py") as fp:
         for cnt, line in enumerate(fp):
             if "import" not in line:
-                file.write(i)
-                file.write("\n")
-    file.close()
-    os.system("python2 python_go/pythonjs/translator.py --go out_convert.py")
-    file_new = open("python_go/python_js/out_convert.go", "r")
+                file1.write(line)
+                file1.write("\n")
+    file1.close()
+    os.system("python python_go/pythonjs/translator.py --go out_convert.py")
+    file_new = open("out_convert.go", "r")
     output = file_new.read()
     file_new.close()
     send_dict["output"] = output
     os.remove("test.asn1")
     os.remove("out_convert.py")
-    os.remove("python_go/python_js/out_convert.go")
+    os.remove("out_convert.go")
     return jsonify(send_dict)
 
 

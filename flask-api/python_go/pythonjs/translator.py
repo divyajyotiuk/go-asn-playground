@@ -154,10 +154,10 @@ def command():
 	f = open("out_convert.go", "w")
 	f.write(js)
 	f.close()
-	#if isinstance(js, dict):
-	#	print( json.dumps(js) )
-	#else:
-	#	print(js)
+	# if isinstance(js, dict):
+	# 	print( json.dumps(js) )
+	# else:
+	# 	print(js)
 
 
 if __name__ == '__main__':
