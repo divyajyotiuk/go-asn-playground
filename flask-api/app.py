@@ -82,13 +82,15 @@ def get_structures():
             if "import" not in line:
                 file.write(i)
                 file.write("\n")
+    file.close()
     os.system("python2 python_go/pythonjs/translator.py --go out_convert.py")
-    file_new = open("out_convert.go", "r")
+    file_new = open("python_go/python_js/out_convert.go", "r")
     output = file_new.read()
+    file_new.close()
     send_dict["output"] = output
     os.remove("test.asn1")
     os.remove("out_convert.py")
-    os.remove("out_convert.go")
+    os.remove("python_go/python_js/out_convert.go")
     return jsonify(send_dict)
 
 
